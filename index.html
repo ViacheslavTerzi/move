@@ -6,7 +6,6 @@
   <title>NEXO Umzug – Ihr Umzug in besten Händen</title>
   <meta name="description" content="NEXO Umzug – zuverlässige Privat- und Firmenumzüge, Möbeltransport, Entsorgung und Montage in der Schweiz." />
   <link rel="stylesheet" href="styles.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
   <div class="page" id="top">
@@ -95,7 +94,10 @@
               <div>✓ 100% Datenschutz</div>
             </div>
           </div>
-          <form class="form" id="contact-form" onsubmit="handleSubmit(event)">
+          <form class="form" id="contact-form" onsubmit="handleSubmit(event)" enctype="multipart/form-data">
+            <input type="hidden" name="_subject" value="Neue Offerte-Anfrage – NEXO Umzug">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_template" value="table">
             <div class="form-grid">
               <div><label>Umzugsart</label><select name="service_type"><option>Privatumzug</option><option>Firmenumzug</option><option>Möbeltransport</option><option>Entsorgung</option></select></div>
               <div><label>Von (PLZ, Ort)</label><input name="from_city" placeholder="z. B. 4800 Zofingen"></div>
