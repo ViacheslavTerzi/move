@@ -1,0 +1,1199 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>YurkoFIX</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+  :root{
+    --bg:#EFECE3;
+    --surface:#FFFFFF;
+    --surface-2:#E3DFD1;
+    --ink:#20242B;
+    --ink-soft:#5B5F66;
+    --accent:#D9531E;
+    --accent-ink:#FFFFFF;
+    --line:#D7D1BF;
+    --steel:#33526C;
+    --steel-soft:#E4EAEF;
+    --shadow: 0 18px 40px -22px rgba(32,36,43,.35);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#14171B;
+      --surface:#1C2026;
+      --surface-2:#242832;
+      --ink:#ECE9E1;
+      --ink-soft:#A5AAB2;
+      --accent:#F2723C;
+      --accent-ink:#191113;
+      --line:#2E333C;
+      --steel:#7096B6;
+      --steel-soft:#1E2A34;
+      --shadow: 0 18px 40px -20px rgba(0,0,0,.55);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#14171B;
+    --surface:#1C2026;
+    --surface-2:#242832;
+    --ink:#ECE9E1;
+    --ink-soft:#A5AAB2;
+    --accent:#F2723C;
+    --accent-ink:#191113;
+    --line:#2E333C;
+    --steel:#7096B6;
+    --steel-soft:#1E2A34;
+    --shadow: 0 18px 40px -20px rgba(0,0,0,.55);
+  }
+
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+  [id]{scroll-margin-top:84px;}
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Source Sans 3', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-inline:0;
+  }
+  img{max-width:100%;display:block;}
+  a{color:inherit;}
+  h1,h2,h3{
+    font-family:'Barlow Condensed', system-ui, sans-serif;
+    font-weight:700;
+    line-height:1.05;
+    margin:0;
+    text-wrap:balance;
+  }
+  .eyebrow{
+    font-family:'Barlow Condensed', system-ui, sans-serif;
+    font-weight:600;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-size:.82rem;
+    color:var(--accent);
+    margin:0 0 .6rem;
+  }
+  .wrap{
+    max-width:1180px;
+    margin-inline:auto;
+    padding-inline:20px;
+  }
+  section{padding-block:clamp(52px,8vw,96px);}
+  .lede{
+    color:var(--ink-soft);
+    font-size:1.05rem;
+    max-width:56ch;
+    line-height:1.55;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:.5rem;
+    font-weight:600;
+    font-size:.98rem;
+    padding:.85rem 1.4rem;
+    border-radius:8px;
+    border:1.5px solid transparent;
+    cursor:pointer;
+    text-decoration:none;
+    transition:transform .15s ease, background .2s ease, border-color .2s ease;
+    font-family:'Source Sans 3', sans-serif;
+  }
+  .btn:active{transform:translateY(1px);}
+  .btn-accent{background:var(--accent);color:var(--accent-ink);}
+  .btn-accent:hover{background:color-mix(in srgb, var(--accent) 88%, black 0%);}
+  .btn-ghost{background:transparent;border-color:var(--line);color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--ink-soft);}
+  .btn svg{width:18px;height:18px;flex:none;}
+
+  /* header */
+  header.site{
+    position:sticky;top:env(safe-area-inset-top,0px);
+    z-index:40;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-row{
+    display:flex;align-items:center;justify-content:space-between;
+    padding-block:14px;
+    gap:16px;
+  }
+  .logo{
+    display:flex;align-items:center;gap:.5rem;
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:700;font-size:1.5rem;letter-spacing:.01em;
+    text-decoration:none;color:var(--ink);
+    flex:none;
+  }
+  .logo .mark{
+    width:34px;height:34px;flex:none;color:var(--accent);
+  }
+  .logo b{color:var(--accent);font-weight:700;}
+  nav.primary{display:flex;align-items:center;gap:26px;}
+  nav.primary a{
+    font-size:.96rem;font-weight:600;text-decoration:none;color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  nav.primary a:hover{color:var(--ink);}
+  .lang-switch{
+    display:flex;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px;flex:none;
+  }
+  .lang-switch button{
+    border:none;background:transparent;color:var(--ink-soft);
+    font-family:'IBM Plex Mono',monospace;font-size:.76rem;font-weight:600;
+    padding:.32rem .6rem;border-radius:999px;cursor:pointer;letter-spacing:.03em;
+  }
+  .lang-switch button[aria-pressed="true"]{background:var(--ink);color:var(--bg);}
+  .nav-actions{display:flex;align-items:center;gap:14px;}
+  .burger{display:none;background:none;border:1px solid var(--line);border-radius:8px;padding:8px;cursor:pointer;color:var(--ink);}
+  .burger svg{width:20px;height:20px;display:block;}
+  #mobileMenu{
+    display:none;
+    flex-direction:column;gap:2px;
+    padding:8px 20px 16px;
+    border-top:1px solid var(--line);
+  }
+  #mobileMenu.open{display:flex;}
+  #mobileMenu a{
+    padding:12px 4px;font-weight:600;text-decoration:none;color:var(--ink);
+    border-bottom:1px solid var(--line);
+  }
+  @media (max-width:860px){
+    nav.primary{display:none;}
+    .burger{display:inline-flex;}
+  }
+
+  /* hero */
+  .hero{
+    padding-block:clamp(48px,9vw,88px) clamp(40px,6vw,64px);
+    border-bottom:1px solid var(--line);
+  }
+  .hero-grid{
+    display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;
+  }
+  @media (max-width:900px){ .hero-grid{grid-template-columns:1fr;} }
+  .hero h1{font-size:clamp(2.1rem,4.4vw,3.4rem);}
+  .hero .lede{margin-block:1.1rem 1.8rem;font-size:1.12rem;}
+  .hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:2.2rem;}
+  .stat-row{display:flex;gap:clamp(20px,4vw,40px);flex-wrap:wrap;}
+  .stat b{
+    display:block;font-family:'IBM Plex Mono',monospace;font-size:1.6rem;font-weight:600;
+    color:var(--ink); font-variant-numeric:tabular-nums;
+  }
+  .stat span{font-size:.82rem;color:var(--ink-soft);}
+
+  .spec-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:16px;
+    box-shadow:var(--shadow);
+    padding:26px 26px 22px;
+    position:relative;
+    overflow:hidden;
+  }
+  .spec-card::before{
+    content:"";position:absolute;inset:0 0 auto 0;height:6px;
+    background:repeating-linear-gradient(135deg, var(--accent) 0 14px, var(--surface-2) 14px 28px);
+  }
+  .spec-card .spec-head{
+    display:flex;justify-content:space-between;align-items:baseline;
+    margin-top:10px;padding-bottom:12px;border-bottom:1px dashed var(--line);
+    font-family:'IBM Plex Mono',monospace;font-size:.76rem;color:var(--ink-soft);letter-spacing:.04em;
+  }
+  .spec-list{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:13px;}
+  .spec-list li{display:flex;gap:12px;align-items:flex-start;font-size:.95rem;}
+  .spec-list svg{width:20px;height:20px;flex:none;color:var(--steel);margin-top:1px;}
+  .spec-list b{font-weight:600;}
+
+  /* section headers */
+  .sec-head{max-width:70ch;margin-bottom:2.4rem;}
+  .sec-head h2{font-size:clamp(1.7rem,3.2vw,2.5rem);}
+  .sec-head .lede{margin-top:.7rem;}
+
+  /* services */
+  .service-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+  }
+  @media (max-width:920px){ .service-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:520px){ .service-grid{grid-template-columns:1fr;} }
+  .service-card{
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:22px 20px;display:flex;flex-direction:column;gap:12px;
+  }
+  .service-card .icon{
+    width:44px;height:44px;border-radius:10px;background:var(--steel-soft);color:var(--steel);
+    display:flex;align-items:center;justify-content:center;flex:none;
+  }
+  .service-card .icon svg{width:24px;height:24px;}
+  .service-card h3{font-size:1.18rem;font-weight:600;font-family:'Source Sans 3',sans-serif;}
+  .service-card p{margin:0;color:var(--ink-soft);font-size:.92rem;line-height:1.5;}
+
+  /* before/after sliders */
+  .ba-section{background:var(--surface-2);border-block:1px solid var(--line);}
+  .ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;}
+  @media (max-width:760px){ .ba-grid{grid-template-columns:1fr;} }
+  .ba-item{display:flex;flex-direction:column;gap:14px;}
+  .ba-slider{
+    --pos:50%;
+    position:relative;aspect-ratio:4/3;
+    border-radius:16px;overflow:hidden;border:1px solid var(--line);
+    box-shadow:var(--shadow);
+    touch-action:pan-y;user-select:none;cursor:ew-resize;
+  }
+  .ba-layer{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:20px;background:var(--surface);}
+  .ba-layer img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .ba-layer.after{background-image:repeating-linear-gradient(135deg, var(--steel-soft) 0 2px, var(--surface) 2px 20px);}
+  .ba-layer.before{
+    background-image:repeating-linear-gradient(135deg, var(--line) 0 2px, var(--surface) 2px 20px);
+    clip-path:inset(0 calc(100% - var(--pos)) 0 0);
+  }
+  .ba-placeholder{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--ink-soft);pointer-events:none;}
+  .ba-placeholder svg{width:32px;height:32px;opacity:.55;}
+  .ba-placeholder span{font-size:.8rem;font-weight:600;}
+  .ba-tag{
+    position:absolute;top:14px;z-index:3;pointer-events:none;
+    font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.74rem;letter-spacing:.08em;
+    padding:.3rem .6rem;border-radius:6px;
+  }
+  .ba-tag.tag-before{left:14px;background:var(--ink);color:var(--bg);}
+  .ba-tag.tag-after{right:14px;background:var(--accent);color:var(--accent-ink);}
+  .ba-handle{position:absolute;top:0;bottom:0;left:var(--pos);transform:translateX(-50%);z-index:4;}
+  .ba-handle::before{
+    content:"";position:absolute;top:0;bottom:0;left:50%;width:2px;
+    background:var(--bg);transform:translateX(-50%);box-shadow:0 0 0 1px rgba(0,0,0,.15);
+  }
+  .ba-handle-btn{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:42px;height:42px;border-radius:50%;
+    background:var(--bg);border:2px solid var(--accent);color:var(--accent);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 16px -4px rgba(0,0,0,.35);cursor:ew-resize;
+  }
+  .ba-handle-btn:focus-visible{outline:2px solid var(--steel);outline-offset:3px;}
+  .ba-handle-btn svg{width:20px;height:20px;}
+  .ba-caption{margin:0;color:var(--ink-soft);font-size:.9rem;text-align:center;}
+
+  /* advantages */
+  .adv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+  @media (max-width:920px){ .adv-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:520px){ .adv-grid{grid-template-columns:1fr;} }
+  .adv-card{padding:4px 2px;}
+  .adv-card .icon{
+    width:46px;height:46px;border-radius:50%;background:var(--surface);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;color:var(--accent);margin-bottom:14px;
+  }
+  .adv-card .icon svg{width:24px;height:24px;}
+  .adv-card h3{font-size:1.15rem;font-weight:600;font-family:'Source Sans 3',sans-serif;margin-bottom:.4rem;}
+  .adv-card p{margin:0;color:var(--ink-soft);font-size:.92rem;line-height:1.5;}
+
+  /* process */
+  .process-list{
+    display:grid;grid-template-columns:repeat(5,1fr);gap:14px;counter-reset:step;
+  }
+  @media (max-width:920px){ .process-list{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .process-list{grid-template-columns:1fr;} }
+  .process-item{
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 18px;
+    position:relative;
+  }
+  .process-item .num{
+    font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--accent);
+    font-size:.85rem;letter-spacing:.05em;margin-bottom:10px;display:block;
+  }
+  .process-item h3{font-size:1.08rem;font-weight:600;font-family:'Source Sans 3',sans-serif;margin-bottom:.4rem;}
+  .process-item p{margin:0;color:var(--ink-soft);font-size:.88rem;line-height:1.5;}
+
+  /* portfolio */
+  .folio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:760px){ .folio-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:480px){ .folio-grid{grid-template-columns:1fr;} }
+  .folio-tile{
+    aspect-ratio:4/3;border-radius:12px;border:1px solid var(--line);
+    background:var(--surface);
+    position:relative;overflow:hidden;
+  }
+  .folio-tile.is-placeholder{
+    background-image:repeating-linear-gradient(135deg, var(--line) 0 2px, transparent 2px 18px);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+    color:var(--ink-soft);
+  }
+  .folio-tile.is-placeholder svg{width:30px;height:30px;opacity:.5;}
+  .folio-tile.is-placeholder span{font-size:.85rem;font-weight:600;text-align:center;padding-inline:10px;}
+  .folio-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .folio-cap{
+    position:absolute;left:0;right:0;bottom:0;z-index:2;
+    padding:22px 12px 10px;
+    font-size:.85rem;font-weight:600;color:#fff;
+    background:linear-gradient(to top, rgba(20,17,15,.72), rgba(20,17,15,0));
+  }
+  .folio-tile[data-photo-index]{cursor:zoom-in;}
+
+  /* lightbox */
+  .lightbox{
+    position:fixed;inset:0;z-index:100;
+    background:rgba(15,13,11,.94);
+    display:flex;align-items:center;justify-content:center;
+    padding:24px;
+    opacity:0;visibility:hidden;
+    transition:opacity .2s ease;
+  }
+  .lightbox.open{opacity:1;visibility:visible;}
+  .lightbox-figure{max-width:min(92vw,1100px);max-height:88vh;display:flex;flex-direction:column;gap:12px;align-items:center;margin:0;}
+  .lightbox-figure img{max-width:100%;max-height:78vh;border-radius:10px;object-fit:contain;box-shadow:0 30px 60px -20px rgba(0,0,0,.6);}
+  .lightbox-figure figcaption{color:#fff;font-size:.95rem;font-weight:600;text-align:center;}
+  .lightbox-close,.lightbox-nav{
+    position:fixed;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.3);
+    color:#fff;border-radius:50%;
+    width:46px;height:46px;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;z-index:101;
+  }
+  .lightbox-close svg,.lightbox-nav svg{width:22px;height:22px;}
+  .lightbox-close:hover,.lightbox-nav:hover{background:rgba(255,255,255,.22);}
+  .lightbox-close{top:20px;right:20px;}
+  .lightbox-nav{top:50%;transform:translateY(-50%);}
+  .lightbox-nav.prev{left:20px;}
+  .lightbox-nav.next{right:20px;}
+  @media (max-width:640px){
+    .lightbox-nav{width:38px;height:38px;}
+    .lightbox-nav.prev{left:8px;}
+    .lightbox-nav.next{right:8px;}
+    .lightbox-close{top:12px;right:12px;width:38px;height:38px;}
+  }
+
+  /* contact */
+  .contact-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:start;}
+  @media (max-width:860px){ .contact-grid{grid-template-columns:1fr;} }
+  form.contact-form{
+    background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:26px;display:flex;flex-direction:column;gap:16px;box-shadow:var(--shadow);
+  }
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field label{font-size:.85rem;font-weight:600;color:var(--ink-soft);}
+  .field input,.field textarea{
+    font-family:inherit;font-size:.98rem;
+    background:var(--bg);border:1px solid var(--line);border-radius:8px;
+    padding:.7rem .85rem;color:var(--ink);
+  }
+  .field input:focus,.field textarea:focus{outline:2px solid var(--steel);outline-offset:1px;}
+  .field textarea{resize:vertical;min-height:96px;font-family:inherit;}
+  .form-note{font-size:.82rem;color:var(--ink-soft);}
+  .info-card{
+    background:var(--ink);color:var(--bg);border-radius:16px;padding:26px;
+    display:flex;flex-direction:column;gap:16px;
+  }
+  .info-card h3{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:600;}
+  .info-row{display:flex;gap:12px;align-items:flex-start;}
+  .info-row svg{width:20px;height:20px;flex:none;color:var(--accent);margin-top:2px;}
+  .info-row div b{display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;opacity:.65;font-weight:600;}
+  .info-row div span{font-family:'IBM Plex Mono',monospace;font-size:.95rem;}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding-block:34px;}
+  .footer-row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;}
+  .footer-row .lede{margin:0;font-size:.9rem;}
+  footer .lang-switch{margin-inline:auto 0;}
+  .fine{
+    margin-top:20px;padding-top:16px;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    font-size:.8rem;color:var(--ink-soft);
+  }
+
+  /* whatsapp fab */
+  .wa-fab{
+    position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));
+    width:56px;height:56px;border-radius:50%;background:#25D366;color:#fff;
+    display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px -8px rgba(0,0,0,.45);
+    z-index:50;text-decoration:none;
+  }
+  .wa-fab svg{width:28px;height:28px;}
+</style>
+</head>
+<body>
+
+
+<header class="site">
+  <div class="wrap nav-row">
+    <a class="logo" href="#top">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M31 8 L40 17 L34 23 L25 14 Z"/>
+        <path d="M25 14 L10 29 C7 32 7 36 10 39 C13 42 17 42 20 39 L35 24"/>
+        <circle cx="14" cy="35" r="2.4" fill="currentColor" stroke="none"/>
+      </svg>
+      Yurko<b>FIX</b>
+    </a>
+    <nav class="primary">
+      <a href="#services" data-i18n="nav.services">Diensten</a>
+      <a href="#before-after" data-i18n="nav.beforeafter">Voor &amp; na</a>
+      <a href="#process" data-i18n="nav.process">Werkwijze</a>
+      <a href="#portfolio" data-i18n="nav.portfolio">Projecten</a>
+      <a href="#contact" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <div class="lang-switch" data-lang-switch role="group" aria-label="Language">
+        <button type="button" data-lang="nl">NL</button>
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="ru">RU</button>
+      </div>
+      <button class="burger" id="burgerBtn" aria-label="Menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobileMenu">
+    <a href="#services" data-i18n="nav.services">Diensten</a>
+    <a href="#before-after" data-i18n="nav.beforeafter">Voor &amp; na</a>
+    <a href="#process" data-i18n="nav.process">Werkwijze</a>
+    <a href="#portfolio" data-i18n="nav.portfolio">Projecten</a>
+    <a href="#contact" data-i18n="nav.contact">Contact</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow" data-i18n="hero.eyebrow">Klussen &amp; verbouwen</p>
+        <h1 data-i18n="hero.title">Van lekkende kraan tot complete verbouwing — YurkoFIX regelt het</h1>
+        <p class="lede" data-i18n="hero.subtitle">Badkamers, keukens, tegelwerk, elektra en al het overige klussenwerk. Eén vakman, één aanspreekpunt, strak binnen budget en planning.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-accent" href="#contact" data-i18n="hero.ctaPrimary">Gratis offerte aanvragen</a>
+          <a class="btn btn-ghost" href="#portfolio" data-i18n="hero.ctaSecondary">Bekijk ons werk</a>
+        </div>
+        <div class="stat-row" id="heroStats"></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-head">
+          <span>YURKOFIX / WORK ORDER</span>
+          <span>#0042</span>
+        </div>
+        <ul class="spec-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            <span data-i18n="hero.spec1">Vaste prijs, zwart op wit vooraf</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            <span data-i18n="hero.spec2">Eigen team, geen onderaannemers</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            <span data-i18n="hero.spec3">Materialen naar keuze of via ons</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            <span data-i18n="hero.spec4">Opruimen na afloop hoort erbij</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow" data-i18n="services.eyebrow">Wat wij doen</p>
+        <h2 data-i18n="services.title">Alles voor je huis, van badkamer tot dak</h2>
+        <p class="lede" data-i18n="services.subtitle">Niet alleen badkamers: YurkoFIX pakt vrijwel elke klus in en om het huis op.</p>
+      </div>
+      <div class="service-grid" id="serviceGrid"></div>
+    </div>
+  </section>
+
+  <section id="before-after" class="ba-section">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow" data-i18n="beforeafter.eyebrow">Resultaat</p>
+        <h2 data-i18n="beforeafter.title">Zie het verschil: voor en na</h2>
+        <p class="lede" data-i18n="beforeafter.subtitle">Sleep de schuifregelaar op onderstaande voorbeelden — vervang de foto's straks door je eigen voor- en na-resultaat.</p>
+      </div>
+
+      <!-- BEFORE/AFTER SLIDERS: each .ba-slider stacks two photo layers (.ba-layer.after behind,
+           .ba-layer.before on top, revealed by dragging the handle). To use real photos, put
+           <img src="..." alt="..."> as the first child inside a .ba-layer.after and the matching
+           .ba-layer.before for each slider below (remove the .ba-placeholder div there). -->
+      <div class="ba-grid">
+        <div class="ba-item">
+          <div class="ba-slider" data-ba-slider>
+            <div class="ba-layer after">
+              <img src="photos/badkamer-na.jpg" alt="Badkamer na renovatie">
+            </div>
+            <div class="ba-layer before">
+              <img src="photos/badkamer-voor.jpg" alt="Badkamer voor renovatie">
+            </div>
+            <span class="ba-tag tag-before" data-i18n="beforeafter.before">VOOR</span>
+            <span class="ba-tag tag-after" data-i18n="beforeafter.after">NA</span>
+            <div class="ba-handle">
+              <div class="ba-handle-btn" role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-label="Voor / na">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>
+              </div>
+            </div>
+          </div>
+          <p class="ba-caption" data-i18n="beforeafter.caption1">Badkamerrenovatie — voorbeeldproject</p>
+        </div>
+
+        <div class="ba-item">
+          <div class="ba-slider" data-ba-slider>
+            <div class="ba-layer after">
+              <img src="photos/algemeen-na.jpg" alt="Kamer na renovatie">
+            </div>
+            <div class="ba-layer before">
+              <img src="photos/algemeen-voor.jpg" alt="Kamer voor renovatie">
+            </div>
+            <span class="ba-tag tag-before" data-i18n="beforeafter.before">VOOR</span>
+            <span class="ba-tag tag-after" data-i18n="beforeafter.after">NA</span>
+            <div class="ba-handle">
+              <div class="ba-handle-btn" role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-label="Voor / na">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>
+              </div>
+            </div>
+          </div>
+          <p class="ba-caption" data-i18n="beforeafter.caption2">Algehele renovatie — voorbeeldproject</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="advantages">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow" data-i18n="advantages.eyebrow">Waarom YurkoFIX</p>
+        <h2 data-i18n="advantages.title">Vakwerk zonder verrassingen</h2>
+      </div>
+      <div class="adv-grid" id="advGrid"></div>
+    </div>
+  </section>
+
+  <section id="process" class="ba-section">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow" data-i18n="process.eyebrow">Werkwijze</p>
+        <h2 data-i18n="process.title">In 5 stappen naar een afgerond project</h2>
+      </div>
+      <div class="process-list" id="processList"></div>
+    </div>
+  </section>
+
+  <section id="portfolio">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow" data-i18n="portfolio.eyebrow">Projecten</p>
+        <h2 data-i18n="portfolio.title">Een greep uit ons werk</h2>
+        <p class="lede" data-i18n="portfolio.subtitle">Foto's van afgeronde projecten volgen hier binnenkort.</p>
+      </div>
+      <div class="folio-grid" id="folioGrid"></div>
+    </div>
+  </section>
+
+  <section id="contact" class="ba-section">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow" data-i18n="contact.eyebrow">Contact</p>
+        <h2 data-i18n="contact.title">Plan een gratis intake</h2>
+        <p class="lede" data-i18n="contact.subtitle">Laat je gegevens achter, of stuur direct een bericht via WhatsApp.</p>
+      </div>
+      <div class="contact-grid">
+        <form class="contact-form" id="contactForm">
+          <div class="field">
+            <label for="cName" data-i18n="contact.formName">Naam</label>
+            <input id="cName" name="name" type="text" required>
+          </div>
+          <div class="field">
+            <label for="cPhone" data-i18n="contact.formPhone">Telefoonnummer</label>
+            <input id="cPhone" name="phone" type="tel" required>
+          </div>
+          <div class="field">
+            <label for="cMsg" data-i18n="contact.formMessage">Beschrijf je klus</label>
+            <textarea id="cMsg" name="message" data-i18n-placeholder="contact.formMessagePh" placeholder="Bijvoorbeeld: badkamer renovatie, ca. 6m²..."></textarea>
+          </div>
+          <button class="btn btn-accent" type="submit">
+            <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 3C9 3 3.3 8.6 3.3 15.5c0 2.6.8 5 2.1 7L3 29l6.7-2.3c1.9 1 4 1.6 6.3 1.6 7 0 12.7-5.6 12.7-12.5S23 3 16 3zm0 22.7c-2.1 0-4-.6-5.6-1.6l-.4-.2-4 1.4 1.3-3.9-.3-.4c-1.2-1.8-1.8-3.9-1.8-6 0-6 5-10.9 11-10.9s10.8 4.9 10.8 10.9-4.8 10.7-10.8 10.7z"/><path d="M22 18.4c-.3-.2-2-1-2.3-1.1-.3-.1-.5-.2-.7.2-.2.3-.8 1.1-1 1.3-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-2-1.8-2.3-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.2-.7-1.7-1-2.3-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1.1 2.8 1.2 3c.1.2 2.2 3.4 5.3 4.7.7.3 1.3.5 1.8.6.8.2 1.4.2 2 .1.6-.1 2-.8 2.2-1.6.3-.8.3-1.4.2-1.6z"/></svg>
+            <span data-i18n="contact.submit">Verstuur via WhatsApp</span>
+          </button>
+          <p class="form-note" data-i18n="contact.note">We reageren doorgaans binnen één werkdag.</p>
+        </form>
+        <div class="info-card">
+          <h3 data-i18n="contact.infoTitle">Direct contact</h3>
+          <div class="info-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/></svg>
+            <div><b data-i18n="contact.phoneLabel">Telefoon</b><span id="infoPhone">+31 6 12 34 56 78</span></div>
+          </div>
+          <div class="info-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+            <div><b data-i18n="contact.emailLabel">E-mail</b><span>info@yurkofix.nl</span></div>
+          </div>
+          <div class="info-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <div><b data-i18n="contact.areaLabel">Werkgebied</b><span data-i18n="contact.areaValue">Amsterdam en omgeving</span></div>
+          </div>
+          <div class="info-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+            <div><b data-i18n="contact.hoursLabel">Bereikbaar</b><span data-i18n="contact.hoursValue">Ma–Za, 08:00–19:00</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-row">
+      <a class="logo" href="#top">
+        <svg class="mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M31 8 L40 17 L34 23 L25 14 Z"/>
+          <path d="M25 14 L10 29 C7 32 7 36 10 39 C13 42 17 42 20 39 L35 24"/>
+          <circle cx="14" cy="35" r="2.4" fill="currentColor" stroke="none"/>
+        </svg>
+        Yurko<b>FIX</b>
+      </a>
+      <p class="lede" data-i18n="footer.tagline">Klussen &amp; verbouwen met vakmanschap.</p>
+      <div class="lang-switch" data-lang-switch role="group" aria-label="Language">
+        <button type="button" data-lang="nl">NL</button>
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="ru">RU</button>
+      </div>
+    </div>
+    <div class="fine">
+      <span>© <span id="yr"></span> YurkoFIX</span>
+      <span data-i18n="footer.rights">Alle rechten voorbehouden.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Sluiten" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+  </button>
+  <button class="lightbox-nav prev" id="lightboxPrev" aria-label="Vorige" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+  </button>
+  <button class="lightbox-nav next" id="lightboxNext" aria-label="Volgende" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+  </button>
+  <figure class="lightbox-figure">
+    <img id="lightboxImg" src="" alt="">
+    <figcaption id="lightboxCaption"></figcaption>
+  </figure>
+</div>
+
+<a class="wa-fab" id="waFab" href="https://wa.me/31612345678" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 3C9 3 3.3 8.6 3.3 15.5c0 2.6.8 5 2.1 7L3 29l6.7-2.3c1.9 1 4 1.6 6.3 1.6 7 0 12.7-5.6 12.7-12.5S23 3 16 3zm0 22.7c-2.1 0-4-.6-5.6-1.6l-.4-.2-4 1.4 1.3-3.9-.3-.4c-1.2-1.8-1.8-3.9-1.8-6 0-6 5-10.9 11-10.9s10.8 4.9 10.8 10.9-4.8 10.7-10.8 10.7z"/><path d="M22 18.4c-.3-.2-2-1-2.3-1.1-.3-.1-.5-.2-.7.2-.2.3-.8 1.1-1 1.3-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-2-1.8-2.3-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.2-.7-1.7-1-2.3-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1.1 2.8 1.2 3c.1.2 2.2 3.4 5.3 4.7.7.3 1.3.5 1.8.6.8.2 1.4.2 2 .1.6-.1 2-.8 2.2-1.6.3-.8.3-1.4.2-1.6z"/></svg>
+</a>
+
+<script>
+(function(){
+  "use strict";
+
+  var ICONS = {
+    bath:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16v2a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5v-2z"/><path d="M7 12V7a2 2 0 0 1 3.6-1.2"/><path d="M4 12V9"/><path d="M9 21v1M15 21v1"/></svg>',
+    kitchen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h13"/><path d="M6 21V9a5 5 0 0 1 10 0"/><path d="M18 4v6"/><path d="M20 4v6"/></svg>',
+    tile:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg>',
+    plumb:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v4a3 3 0 0 0 6 0V3"/><path d="M12 7v6"/><path d="M7 13h10l-1.5 7h-7z"/></svg>',
+    electric:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>',
+    paint:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21c1-4 2-6 5-9l6-6 3 3-6 6c-3 3-5 4-9 5z"/><path d="M14 6l4 4"/></svg>',
+    floor:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-5 9 5-9 5z"/><path d="M3 14l9 5 9-5"/></svg>',
+    handyman:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 1-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 1 5.4-5.4L15 12l-3-3z"/></svg>',
+    experience:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="M8.2 13.5 6 21l6-3 6 3-2.2-7.5"/></svg>',
+    guarantee:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>',
+    price:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12 12 20l-8-8 8-8h8z"/><circle cx="15" cy="9" r="1.4" fill="currentColor" stroke="none"/></svg>',
+    speed:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg>',
+    folio:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13.5" r="3.4"/></svg>'
+  };
+
+  // Portfolio photos, aligned by index with each language's portfolio.items array.
+  // null = no photo yet (placeholder shown). Add more real projects here as photos come in.
+  var PORTFOLIO_IMAGES = [
+    "photos/portfolio-badkamer.jpg",
+    "photos/portfolio-keuken.jpg",
+    "photos/portfolio-tegelwerk.jpg",
+    "photos/portfolio-vloerverwarming.jpg",
+    null,
+    "photos/portfolio-badkamer-dubbel.jpg"
+  ];
+
+  var I18N = {
+    nl:{
+      nav:{services:"Diensten",beforeafter:"Voor &amp; na",process:"Werkwijze",portfolio:"Projecten",contact:"Contact",cta:"Offerte aanvragen"},
+      hero:{
+        eyebrow:"Klussen &amp; verbouwen",
+        title:"Van lekkende kraan tot complete verbouwing — YurkoFIX regelt het",
+        subtitle:"Badkamers, keukens, tegelwerk, elektra en al het overige klussenwerk. Eén vakman, één aanspreekpunt, strak binnen budget en planning.",
+        ctaPrimary:"Gratis offerte aanvragen",
+        ctaSecondary:"Bekijk ons werk",
+        spec1:"Vaste prijs, zwart op wit vooraf",
+        spec2:"Eigen team, geen onderaannemers",
+        spec3:"Materialen naar keuze of via ons",
+        spec4:"Opruimen na afloop hoort erbij",
+        stats:[{num:"9+",label:"jaar ervaring"},{num:"140+",label:"afgeronde projecten"},{num:"3 jaar",label:"garantie op werk"}]
+      },
+      services:{
+        eyebrow:"Wat wij doen",
+        title:"Alles voor je huis, van badkamer tot dak",
+        subtitle:"Niet alleen badkamers: YurkoFIX pakt vrijwel elke klus in en om het huis op.",
+        items:[
+          {icon:"bath",title:"Badkamer renovatie",desc:"Complete badkamerverbouwing van sloop tot oplevering, inclusief sanitair, tegels en waterdichting."},
+          {icon:"kitchen",title:"Keuken renovatie",desc:"Nieuwe keuken plaatsen of bestaande keuken vernieuwen, inclusief aansluitingen en afwerking."},
+          {icon:"tile",title:"Tegelwerk",desc:"Strak tegelwerk voor badkamer, keuken en vloeren, ook bij lastige maten en patronen."},
+          {icon:"plumb",title:"Loodgieterswerk",desc:"Leidingwerk, kranen, afvoeren en reparaties — snel verholpen, netjes afgewerkt."},
+          {icon:"electric",title:"Elektra",desc:"Groepen, stopcontacten, verlichting en verdeelkasten, veilig aangelegd volgens de normen."},
+          {icon:"paint",title:"Schilderwerk &amp; afwerking",desc:"Wanden, plafonds en kozijnen strak geschilderd of gestuukt, binnen en buiten."},
+          {icon:"floor",title:"Vloeren",desc:"Leggen van laminaat, PVC, tegels of gietvloer, inclusief ondervloer en afwerking."},
+          {icon:"handyman",title:"Klussen &amp; onderhoud",desc:"Kleine reparaties, montage en onderhoudsklussen — voor alles waar je zelf niet aan toekomt."}
+        ]
+      },
+      beforeafter:{
+        eyebrow:"Resultaat",
+        title:"Zie het verschil: voor en na",
+        subtitle:"Sleep de schuifregelaar op onderstaande voorbeelden — vervang de foto's straks door je eigen voor- en na-resultaat.",
+        before:"VOOR",after:"NA",
+        placeholder:"Foto volgt",
+        caption1:"Badkamerrenovatie — voorbeeldproject",
+        caption2:"Algehele renovatie — voorbeeldproject"
+      },
+      advantages:{
+        eyebrow:"Waarom YurkoFIX",
+        title:"Vakwerk zonder verrassingen",
+        items:[
+          {icon:"experience",title:"9+ jaar ervaring",desc:"Ruime ervaring met renovaties en klussen in alle soorten woningen."},
+          {icon:"guarantee",title:"3 jaar garantie",desc:"Op al het uitgevoerde werk krijg je schriftelijke garantie."},
+          {icon:"price",title:"Transparante prijzen",desc:"Vaste prijsafspraken vooraf, geen verrassingen achteraf."},
+          {icon:"speed",title:"Snelle oplevering",desc:"Duidelijke planning en korte doorlooptijden, ook bij spoed."}
+        ]
+      },
+      process:{
+        eyebrow:"Werkwijze",
+        title:"In 5 stappen naar een afgerond project",
+        steps:[
+          {title:"Aanvraag &amp; intake",desc:"Je stuurt je klus of wens, wij bellen of komen langs voor een gratis intake."},
+          {title:"Opname &amp; offerte",desc:"We nemen de situatie op en sturen een duidelijke offerte met vaste prijs."},
+          {title:"Planning &amp; materiaal",desc:"Samen plannen we de start en kiezen we materialen die bij je passen."},
+          {title:"Uitvoering",desc:"Ons team voert het werk vakkundig en netjes uit, met dagelijkse update indien gewenst."},
+          {title:"Oplevering &amp; garantie",desc:"We leveren op, ruimen op en geven schriftelijke garantie op het werk."}
+        ]
+      },
+      portfolio:{
+        eyebrow:"Projecten",
+        title:"Een greep uit ons werk",
+        subtitle:"Enkele recente projecten — meer voorbeelden volgen binnenkort.",
+        items:["Badkamerrenovatie","Keukenrenovatie","Tegelwerk","Vloerverwarming leggen","Schilderwerk","Badkamer met dubbele wastafel"]
+      },
+      contact:{
+        eyebrow:"Contact",
+        title:"Plan een gratis intake",
+        subtitle:"Laat je gegevens achter, of stuur direct een bericht via WhatsApp.",
+        formName:"Naam",formPhone:"Telefoonnummer",formMessage:"Beschrijf je klus",
+        formMessagePh:"Bijvoorbeeld: badkamer renovatie, ca. 6m²...",
+        submit:"Verstuur via WhatsApp",
+        note:"We reageren doorgaans binnen één werkdag.",
+        infoTitle:"Direct contact",
+        phoneLabel:"Telefoon",emailLabel:"E-mail",areaLabel:"Werkgebied",areaValue:"Amsterdam en omgeving",
+        hoursLabel:"Bereikbaar",hoursValue:"Ma–Za, 08:00–19:00",
+        waTemplate:function(n,p,m){return "Hallo YurkoFIX! Naam: "+n+". Telefoon: "+p+". Klus: "+m;}
+      },
+      footer:{tagline:"Klussen &amp; verbouwen met vakmanschap.",rights:"Alle rechten voorbehouden."}
+    },
+    en:{
+      nav:{services:"Services",beforeafter:"Before &amp; after",process:"Process",portfolio:"Projects",contact:"Contact",cta:"Get a quote"},
+      hero:{
+        eyebrow:"Renovation &amp; repairs",
+        title:"From a leaking tap to a full renovation — YurkoFIX handles it",
+        subtitle:"Bathrooms, kitchens, tiling, electrics and every other job around the house. One tradesman, one point of contact, on budget and on schedule.",
+        ctaPrimary:"Request a free quote",
+        ctaSecondary:"See our work",
+        spec1:"Fixed price, agreed in writing upfront",
+        spec2:"Our own crew, no subcontractors",
+        spec3:"Materials of your choice, or sourced by us",
+        spec4:"Clean-up afterwards is included",
+        stats:[{num:"9+",label:"years of experience"},{num:"140+",label:"projects completed"},{num:"3 years",label:"warranty on work"}]
+      },
+      services:{
+        eyebrow:"What we do",
+        title:"Everything for your home, from bathroom to roof",
+        subtitle:"Not just bathrooms: YurkoFIX takes on almost any job in and around the house.",
+        items:[
+          {icon:"bath",title:"Bathroom renovation",desc:"Full bathroom renovation from demolition to handover, including fixtures, tiling and waterproofing."},
+          {icon:"kitchen",title:"Kitchen renovation",desc:"New kitchen installation or a refresh of your existing one, including connections and finishing."},
+          {icon:"tile",title:"Tiling",desc:"Precise tiling for bathrooms, kitchens and floors, including tricky sizes and patterns."},
+          {icon:"plumb",title:"Plumbing",desc:"Pipework, taps, drains and repairs — fixed quickly and finished neatly."},
+          {icon:"electric",title:"Electrical work",desc:"Circuits, sockets, lighting and distribution boards, wired safely to code."},
+          {icon:"paint",title:"Painting &amp; finishing",desc:"Walls, ceilings and window frames painted or plastered smoothly, indoors and out."},
+          {icon:"floor",title:"Flooring",desc:"Laminate, vinyl, tile or poured floors, including subfloor preparation and finishing."},
+          {icon:"handyman",title:"Repairs &amp; maintenance",desc:"Small repairs, assembly and upkeep jobs — for everything you never get around to."}
+        ]
+      },
+      beforeafter:{
+        eyebrow:"Result",
+        title:"See the difference: before and after",
+        subtitle:"Drag the slider on the examples below — swap in your own before-and-after photos here later.",
+        before:"BEFORE",after:"AFTER",
+        placeholder:"Photo coming soon",
+        caption1:"Bathroom renovation — example project",
+        caption2:"General renovation — example project"
+      },
+      advantages:{
+        eyebrow:"Why YurkoFIX",
+        title:"Skilled work, no surprises",
+        items:[
+          {icon:"experience",title:"9+ years of experience",desc:"Extensive experience with renovations and repairs in all types of homes."},
+          {icon:"guarantee",title:"3-year warranty",desc:"Every job comes with a written warranty."},
+          {icon:"price",title:"Transparent pricing",desc:"Fixed prices agreed upfront, no surprises afterwards."},
+          {icon:"speed",title:"Fast delivery",desc:"Clear planning and short lead times, even for urgent jobs."}
+        ]
+      },
+      process:{
+        eyebrow:"How we work",
+        title:"Five steps to a finished project",
+        steps:[
+          {title:"Request &amp; intake",desc:"Send us your job or wish, we call or visit for a free intake."},
+          {title:"Survey &amp; quote",desc:"We assess the situation and send a clear quote with a fixed price."},
+          {title:"Planning &amp; materials",desc:"Together we plan the start date and choose materials that suit you."},
+          {title:"Execution",desc:"Our team carries out the work skilfully and tidily, with daily updates if you like."},
+          {title:"Handover &amp; warranty",desc:"We hand over, clean up, and give written warranty on the work."}
+        ]
+      },
+      portfolio:{
+        eyebrow:"Projects",
+        title:"A look at our work",
+        subtitle:"A few recent projects — more examples coming soon.",
+        items:["Bathroom renovation","Kitchen renovation","Tiling","Underfloor heating installation","Painting","Bathroom with double vanity"]
+      },
+      contact:{
+        eyebrow:"Contact",
+        title:"Book a free intake",
+        subtitle:"Leave your details, or message us directly on WhatsApp.",
+        formName:"Name",formPhone:"Phone number",formMessage:"Describe your job",
+        formMessagePh:"For example: bathroom renovation, approx. 6m²...",
+        submit:"Send via WhatsApp",
+        note:"We usually reply within one working day.",
+        infoTitle:"Direct contact",
+        phoneLabel:"Phone",emailLabel:"Email",areaLabel:"Service area",areaValue:"Amsterdam and surrounding area",
+        hoursLabel:"Available",hoursValue:"Mon–Sat, 08:00–19:00",
+        waTemplate:function(n,p,m){return "Hello YurkoFIX! Name: "+n+". Phone: "+p+". Job: "+m;}
+      },
+      footer:{tagline:"Renovations &amp; repairs, done right.",rights:"All rights reserved."}
+    },
+    ru:{
+      nav:{services:"Услуги",beforeafter:"До и после",process:"Как мы работаем",portfolio:"Проекты",contact:"Контакты",cta:"Заказать смету"},
+      hero:{
+        eyebrow:"Ремонт и отделка",
+        title:"От протекающего крана до капитального ремонта — YurkoFIX сделает всё",
+        subtitle:"Ванные комнаты, кухни, плитка, электрика и любые другие работы по дому. Один мастер, один контакт, точные сроки и бюджет.",
+        ctaPrimary:"Бесплатная смета",
+        ctaSecondary:"Посмотреть работы",
+        spec1:"Фиксированная цена, письменно и заранее",
+        spec2:"Своя бригада, без субподряда",
+        spec3:"Материалы ваши или наши — на выбор",
+        spec4:"Уборка после работ включена",
+        stats:[{num:"9+",label:"лет опыта"},{num:"140+",label:"завершённых проектов"},{num:"3 года",label:"гарантии на работы"}]
+      },
+      services:{
+        eyebrow:"Что мы делаем",
+        title:"Всё для вашего дома — от ванной до крыши",
+        subtitle:"Не только ванные комнаты: YurkoFIX берётся практически за любые работы в доме и вокруг него.",
+        items:[
+          {icon:"bath",title:"Ремонт ванной комнаты",desc:"Полный ремонт ванной под ключ: демонтаж, сантехника, плитка и гидроизоляция."},
+          {icon:"kitchen",title:"Ремонт кухни",desc:"Установка новой кухни или обновление старой, включая подключения и финальную отделку."},
+          {icon:"tile",title:"Плиточные работы",desc:"Аккуратная укладка плитки в ванной, на кухне и на полу, в том числе сложные раскладки."},
+          {icon:"plumb",title:"Сантехника",desc:"Трубы, краны, канализация и ремонт — быстро и аккуратно."},
+          {icon:"electric",title:"Электрика",desc:"Проводка, розетки, освещение и щитки — безопасно и по нормам."},
+          {icon:"paint",title:"Малярные и отделочные работы",desc:"Стены, потолки и откосы, покраска и штукатурка внутри и снаружи."},
+          {icon:"floor",title:"Полы",desc:"Укладка ламината, ПВХ-плитки, керамогранита или наливного пола с подготовкой основания."},
+          {icon:"handyman",title:"Мелкий ремонт и обслуживание",desc:"Небольшой ремонт, сборка мебели и текущее обслуживание — всё, до чего не доходят руки."}
+        ]
+      },
+      beforeafter:{
+        eyebrow:"Результат",
+        title:"Разница видна сразу: до и после",
+        subtitle:"Потяните ползунок на примерах ниже — позже добавим сюда ваши настоящие фото до и после.",
+        before:"ДО",after:"ПОСЛЕ",
+        placeholder:"Фото скоро",
+        caption1:"Ремонт ванной — пример проекта",
+        caption2:"Общий ремонт — пример проекта"
+      },
+      advantages:{
+        eyebrow:"Почему YurkoFIX",
+        title:"Качественная работа без сюрпризов",
+        items:[
+          {icon:"experience",title:"9+ лет опыта",desc:"Большой опыт ремонта и мелких работ в самых разных домах."},
+          {icon:"guarantee",title:"Гарантия 3 года",desc:"На все выполненные работы предоставляется письменная гарантия."},
+          {icon:"price",title:"Прозрачные цены",desc:"Фиксированная стоимость заранее, без сюрпризов потом."},
+          {icon:"speed",title:"Быстрая сдача",desc:"Понятный график и короткие сроки, в том числе срочные заказы."}
+        ]
+      },
+      process:{
+        eyebrow:"Как мы работаем",
+        title:"Пять шагов до готового результата",
+        steps:[
+          {title:"Заявка и консультация",desc:"Присылаете задачу, мы звоним или приезжаем на бесплатный осмотр."},
+          {title:"Осмотр и смета",desc:"Оцениваем объём работ и присылаем понятную смету с фиксированной ценой."},
+          {title:"Планирование и материалы",desc:"Согласуем сроки начала и подбираем материалы под ваш бюджет и вкус."},
+          {title:"Выполнение работ",desc:"Команда выполняет работу аккуратно и профессионально, при желании — с ежедневными отчётами."},
+          {title:"Сдача и гарантия",desc:"Сдаём объект, убираем за собой и даём письменную гарантию на работы."}
+        ]
+      },
+      portfolio:{
+        eyebrow:"Проекты",
+        title:"Примеры наших работ",
+        subtitle:"Несколько последних проектов — больше примеров появится совсем скоро.",
+        items:["Ремонт ванной","Ремонт кухни","Плиточные работы","Укладка тёплого пола","Малярные работы","Ванная с двумя раковинами"]
+      },
+      contact:{
+        eyebrow:"Контакты",
+        title:"Запишитесь на бесплатный осмотр",
+        subtitle:"Оставьте свои данные или напишите сразу в WhatsApp.",
+        formName:"Имя",formPhone:"Телефон",formMessage:"Опишите задачу",
+        formMessagePh:"Например: ремонт ванной, примерно 6 м²...",
+        submit:"Отправить в WhatsApp",
+        note:"Обычно отвечаем в течение одного рабочего дня.",
+        infoTitle:"Прямая связь",
+        phoneLabel:"Телефон",emailLabel:"Email",areaLabel:"Регион работы",areaValue:"Амстердам и окрестности",
+        hoursLabel:"Доступны",hoursValue:"Пн–Сб, 08:00–19:00",
+        waTemplate:function(n,p,m){return "Здравствуйте, YurkoFIX! Имя: "+n+". Телефон: "+p+". Задача: "+m;}
+      },
+      footer:{tagline:"Ремонт и отделка — качественно и в срок.",rights:"Все права защищены."}
+    }
+  };
+
+  var WA_NUMBER = "31612345678";
+  var currentLang = "nl";
+
+  function getPath(obj, path){
+    return path.split(".").reduce(function(acc,k){ return acc && acc[k] !== undefined ? acc[k] : null; }, obj);
+  }
+
+  function applyStaticText(lang){
+    var dict = I18N[lang];
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      var val = getPath(dict, el.getAttribute("data-i18n"));
+      if(val !== null) el.innerHTML = val;
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(function(el){
+      var val = getPath(dict, el.getAttribute("data-i18n-placeholder"));
+      if(val !== null) el.setAttribute("placeholder", val);
+    });
+  }
+
+  function renderStats(lang){
+    var el = document.getElementById("heroStats");
+    el.innerHTML = I18N[lang].hero.stats.map(function(s){
+      return '<div class="stat"><b>'+s.num+'</b><span>'+s.label+'</span></div>';
+    }).join("");
+  }
+
+  function renderServices(lang){
+    var el = document.getElementById("serviceGrid");
+    el.innerHTML = I18N[lang].services.items.map(function(s){
+      return '<div class="service-card"><div class="icon">'+(ICONS[s.icon]||"")+'</div><h3>'+s.title+'</h3><p>'+s.desc+'</p></div>';
+    }).join("");
+  }
+
+  function renderAdvantages(lang){
+    var el = document.getElementById("advGrid");
+    el.innerHTML = I18N[lang].advantages.items.map(function(a){
+      return '<div class="adv-card"><div class="icon">'+(ICONS[a.icon]||"")+'</div><h3>'+a.title+'</h3><p>'+a.desc+'</p></div>';
+    }).join("");
+  }
+
+  function renderProcess(lang){
+    var el = document.getElementById("processList");
+    el.innerHTML = I18N[lang].process.steps.map(function(s,i){
+      return '<div class="process-item"><span class="num">0'+(i+1)+'</span><h3>'+s.title+'</h3><p>'+s.desc+'</p></div>';
+    }).join("");
+  }
+
+  function renderFolio(lang){
+    var el = document.getElementById("folioGrid");
+    var photoIndex = 0;
+    el.innerHTML = I18N[lang].portfolio.items.map(function(cap, i){
+      var img = PORTFOLIO_IMAGES[i];
+      if(img){
+        var idx = photoIndex++;
+        return '<div class="folio-tile" data-photo-index="'+idx+'"><img src="'+img+'" alt="'+cap+'"><span class="folio-cap">'+cap+'</span></div>';
+      }
+      return '<div class="folio-tile is-placeholder">'+ICONS.folio+'<span>'+cap+'</span></div>';
+    }).join("");
+  }
+
+  function updateWaLinks(lang){
+    document.getElementById("waFab").href = "https://wa.me/"+WA_NUMBER;
+  }
+
+  function setLang(lang){
+    if(!I18N[lang]) lang = "nl";
+    currentLang = lang;
+    document.documentElement.setAttribute("lang", lang);
+    applyStaticText(lang);
+    renderStats(lang);
+    renderServices(lang);
+    renderAdvantages(lang);
+    renderProcess(lang);
+    renderFolio(lang);
+    updateWaLinks(lang);
+    document.querySelectorAll("[data-lang-switch] button").forEach(function(btn){
+      btn.setAttribute("aria-pressed", String(btn.getAttribute("data-lang") === lang));
+    });
+    try{ localStorage.setItem("yurkofix-lang", lang); }catch(e){}
+  }
+
+  function initLang(){
+    var saved = null;
+    try{ saved = localStorage.getItem("yurkofix-lang"); }catch(e){}
+    setLang(saved && I18N[saved] ? saved : "nl");
+  }
+
+  document.querySelectorAll("[data-lang-switch] button").forEach(function(btn){
+    btn.addEventListener("click", function(){ setLang(btn.getAttribute("data-lang")); });
+  });
+
+  var burger = document.getElementById("burgerBtn");
+  var mobileMenu = document.getElementById("mobileMenu");
+  burger.addEventListener("click", function(){
+    var open = mobileMenu.classList.toggle("open");
+    burger.setAttribute("aria-expanded", String(open));
+  });
+  mobileMenu.querySelectorAll("a").forEach(function(a){
+    a.addEventListener("click", function(){ mobileMenu.classList.remove("open"); });
+  });
+
+  document.getElementById("contactForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var name = document.getElementById("cName").value.trim();
+    var phone = document.getElementById("cPhone").value.trim();
+    var msg = document.getElementById("cMsg").value.trim();
+    var text = I18N[currentLang].contact.waTemplate(name, phone, msg);
+    window.open("https://wa.me/"+WA_NUMBER+"?text="+encodeURIComponent(text), "_blank");
+  });
+
+  document.getElementById("yr").textContent = new Date().getFullYear();
+
+  function initBaSliders(){
+    document.querySelectorAll("[data-ba-slider]").forEach(function(slider){
+      var handleBtn = slider.querySelector(".ba-handle-btn");
+      var dragging = false;
+
+      function setPos(clientX){
+        var rect = slider.getBoundingClientRect();
+        var pct = ((clientX - rect.left) / rect.width) * 100;
+        pct = Math.max(0, Math.min(100, pct));
+        slider.style.setProperty("--pos", pct + "%");
+        handleBtn.setAttribute("aria-valuenow", String(Math.round(pct)));
+      }
+
+      slider.addEventListener("pointerdown", function(e){
+        dragging = true;
+        try{ slider.setPointerCapture(e.pointerId); }catch(err){}
+        setPos(e.clientX);
+      });
+      slider.addEventListener("pointermove", function(e){
+        if(!dragging) return;
+        setPos(e.clientX);
+      });
+      ["pointerup","pointercancel"].forEach(function(evt){
+        slider.addEventListener(evt, function(e){
+          dragging = false;
+          try{ slider.releasePointerCapture(e.pointerId); }catch(err){}
+        });
+      });
+
+      handleBtn.addEventListener("keydown", function(e){
+        var current = parseFloat(getComputedStyle(slider).getPropertyValue("--pos")) || 50;
+        var step = 5;
+        if(e.key === "ArrowLeft"){ current = Math.max(0, current - step); }
+        else if(e.key === "ArrowRight"){ current = Math.min(100, current + step); }
+        else if(e.key === "Home"){ current = 0; }
+        else if(e.key === "End"){ current = 100; }
+        else { return; }
+        e.preventDefault();
+        slider.style.setProperty("--pos", current + "%");
+        handleBtn.setAttribute("aria-valuenow", String(Math.round(current)));
+      });
+    });
+  }
+
+  function initLightbox(){
+    var lb = document.getElementById("lightbox");
+    var lbImg = document.getElementById("lightboxImg");
+    var lbCaption = document.getElementById("lightboxCaption");
+    var closeBtn = document.getElementById("lightboxClose");
+    var prevBtn = document.getElementById("lightboxPrev");
+    var nextBtn = document.getElementById("lightboxNext");
+    var grid = document.getElementById("folioGrid");
+    var items = [];
+    var currentIndex = -1;
+    var lastFocused = null;
+
+    function collectItems(){
+      items = [];
+      I18N[currentLang].portfolio.items.forEach(function(cap, i){
+        var src = PORTFOLIO_IMAGES[i];
+        if(src) items.push({src: src, caption: cap});
+      });
+    }
+
+    function show(index){
+      if(!items.length) return;
+      currentIndex = ((index % items.length) + items.length) % items.length;
+      var item = items[currentIndex];
+      lbImg.src = item.src;
+      lbImg.alt = item.caption;
+      lbCaption.textContent = item.caption;
+    }
+
+    function openAt(index, triggerEl){
+      collectItems();
+      if(!items.length) return;
+      show(index);
+      lastFocused = triggerEl || document.activeElement;
+      lb.classList.add("open");
+      lb.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    }
+
+    function close(){
+      lb.classList.remove("open");
+      lb.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      if(lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
+    }
+
+    grid.addEventListener("click", function(e){
+      var tile = e.target.closest("[data-photo-index]");
+      if(!tile) return;
+      openAt(parseInt(tile.getAttribute("data-photo-index"), 10), tile);
+    });
+
+    closeBtn.addEventListener("click", close);
+    prevBtn.addEventListener("click", function(){ show(currentIndex - 1); });
+    nextBtn.addEventListener("click", function(){ show(currentIndex + 1); });
+
+    lb.addEventListener("click", function(e){
+      if(e.target === lb) close();
+    });
+
+    document.addEventListener("keydown", function(e){
+      if(!lb.classList.contains("open")) return;
+      if(e.key === "Escape") close();
+      else if(e.key === "ArrowLeft") show(currentIndex - 1);
+      else if(e.key === "ArrowRight") show(currentIndex + 1);
+    });
+  }
+
+  initBaSliders();
+  initLightbox();
+  initLang();
+})();
+</script>
+
+</body>
+</html>
